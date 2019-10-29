@@ -5,14 +5,12 @@ const bodyParser = require('body-parser');
 const dbConfig = require('./config/database.config.js')
 const mongoose = require('mongoose')
 
-//require('./routes/note.routes.js')(app); // need to understand this line
-
 //const product = require('./routes/product.route');
 
 // create express app
 const app = express();
 
-mongoose.Promise = global.Promise; // need to understand this line
+mongoose.Promise = global.Promise; // ** need to understand this line
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))

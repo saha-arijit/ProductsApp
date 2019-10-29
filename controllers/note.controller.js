@@ -50,14 +50,59 @@ exports.findAll = (req, res) => {
 // Find a single note with a noteId
 exports.findOne = (req, res) => {
 
+    Note.findById(req.params.noteId)
+    .then( note => {
+        if(!note){
+            return res.status(404).send({
+                message : "Not found note with node id : " + req.params.noteId
+            })
+        }
+        res.status(200).send({
+            message : "Found Note with node id : " + req.params.noteId,
+            "data" : note
+        })
+    }).catch(err => {
+        if(err.kind === 'ObjectId'){
+            return res.status(404).send({
+                message : "Not found note with node id : " + req.params.noteId
+            })             
+        }
+
+        return res.status(500).send({
+            message : "Error in finding note with node id : " + req.params.noteId
+        })
+    })
+
 };
 
 // Update a note identified by the noteId in the request
 exports.update = (req, res) => {
+
+    
 
 };
 
 // Delete a note with the specified noteId in the request
 exports.delete = (req, res) => {
 
+    Note.findByIdAndRemove(req.params.noteId)
+    .then(note => {
+        if(!note){
+            return res.status(404).send({
+                message : "Not able to find note with given id : "+ req.params.noteId
+            })
+        }
+        res.status(200).send({
+            message : "Note deleted successfully."
+        })
+    }).catch(err => {
+        if(err.kind === 'ObjectId' || err.name === 'NotFound') {
+            return res.status(404).send({
+                message: "Note not found with id " + req.params.noteId
+            });                
+        }
+        return res.status(500).send({
+            message: "Could not delete note with id " + req.params.noteId
+        });
+    });
 };
